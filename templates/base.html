@@ -39,14 +39,34 @@
 
         </ul>
 
-        <form method="GET" action="/search" class="d-flex" role="search">
+        <form method="GET" action="/search" class="d-flex mx-3" role="search">
           <input class="form-control me-2" type="search" name="query" id="search" placeholder="Search"
             aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
+        
+
+        {% if user.is_authenticated %}
+        <ul class="navbar-nav ml-auto mb-2 mr-4 mb-lg-0">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Welcome {{request.user}}</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/logout">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+
+        {% else %}
+        <!-- Button to trigger Login modal -->
+        <button type="button" class="btn btn-success mx-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
 
         <!-- Button to trigger Signup modal -->
-        <button type="button" class="btn btn-outline-success mx-2" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</button>
+        <button type="button" class="btn btn-success mr-2" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</button>
+        
+
+        {% endif %}
+
+
 
       </div>
     </div>
@@ -69,37 +89,92 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="signupModalLabel">Modal title</h5>
+          <h5 class="modal-title" id="signupModalLabel">Signup here</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
 
-          <form>
+          <form method="post" action="/signup"> {% csrf_token %}
+
             <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Email address</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-              <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" name="username" placeholder="Choose an unique username" required>
             </div>
+
             <div class="mb-3">
-              <label for="exampleInputPassword1" class="form-label">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword1">
+              <label for="fname" class="form-label">First Name</label>
+              <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" required>
             </div>
-            <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" id="exampleCheck1">
-              <label class="form-check-label" for="exampleCheck1">Check me out</label>
+            
+            <div class="mb-3">
+              <label for="lname" class="form-label">Last Name</label>
+              <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name" required>
             </div>
+            
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="pass1" class="form-label">Choose a Password</label>
+              <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Choose a Password" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="pass2" class="form-label">Confirm Password</label>
+              <input type="password" class="form-control" id="pass2" name="pass2" placeholder="Enter your password again" required>
+            </div>
+            
             <button type="submit" class="btn btn-primary">Submit</button>
+
           </form>
-
-
         </div>
-        <div class="modal-footer">
+
+        <!-- <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
+
+
+  <!-- Login Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="signupModalLabel">Login here</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <form method="post" action="/login"> 
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="loginusername" class="form-label">Username</label>
+              <input type="text" class="form-control" id="loginusername" name="loginusername" placeholder="Username" required>
+            </div>           
+            
+            <div class="mb-3">
+              <label for="loginpass" class="form-label">Enter your Password</label>
+              <input type="password" class="form-control" id="loginpass" name="loginpass" placeholder="Password" required>
+            </div>
+           
+            <button type="submit" class="btn btn-primary">Submit</button>
+
+          </form>
+        </div>
+
+        <!-- <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
 
 
   {% block body %}{% endblock body %}
