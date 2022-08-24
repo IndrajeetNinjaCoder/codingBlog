@@ -1,8 +1,22 @@
 {% extends 'base.html' %}
 
 {% block title %}blog Post{% endblock title %}
-{% block body %}
 
+{% block css %}
+<style>
+    .row img {
+        position: relative;
+        left: 42px;
+    }
+
+    .col-md-1 {
+        margin-left: -30px;
+    }
+</style>
+{% endblock css %}
+
+{% block body %}
+{% load humanize %}
 <div class="container">
     <div class="blog-post">
         <h2 class="blog-post-title mb-1">{{ post.title }}</h2>
@@ -10,5 +24,100 @@
         <p>{{ post.content|safe }}</p>
     </div>
 </div>
+
+<div class="container">
+
+
+    <h2>Comments ({{comments|length}})</h2>
+    <div class="my-2">
+
+        {% if user.is_authenticated %}
+        {% comment %} <h1>{{user.username}}</h1> {% endcomment %}
+
+        <form class="d-flex" action="/blog/postcomment" method="post"> {% csrf_token %}
+            <input type="hidden" name="postSno" value="{{ post.sno }}" id="postSno">
+            <input type="hidden" name="parentSno" value="">
+
+            <input class="form-control me-2 border border-primary" type="text" name="comment" id="comment"
+                placeholder="Enter a Comment here">
+            <button class="btn btn-primary" type="submit">Comment</button>
+        </form>
+        {% else %}
+        <p>Please login to Post a comment</p>
+        {% endif %}
+
+    </div>
+
+
+    {% for comment in comments %}
+
+    <div class="row g-0 border rounded overflow-hidden flex-md-row my-3 pt-2 shadow-sm h-md-250 position-relative">
+        <div class="row">
+            <div class="col-md-1">
+                <img src="/static/img/user.jpg" width="50px" alt="">
+            </div>
+            <div class="col-md-11">
+                <strong>{{comment.user.username}}</strong> <small>{{comment.timestamp|naturaltime}}</small>
+                <div>{{comment.comment}}</div>
+
+
+                <!-- Reply to a comment -->
+                <div class="reply mx-0">
+
+                    {% if user.is_authenticated %}
+
+                    <a class="btn btn-sm btn-primary my-2" data-bs-toggle="collapse" href="#replyBox{{comment.sno}}"
+                        role="button" aria-expanded="false" aria-controls="replyBox{{comment.sno}}">Reply</a>
+
+                    <div class="collapse my-2" id="replyBox{{comment.sno}}">
+
+                        <form class="d-flex" action="/blog/postcomment" method="post"> {% csrf_token %}
+                            <input type="hidden" name="postSno" value="{{ post.sno }}" id="postSno">
+
+                            <input class="form-control me-2 border border-primary" type="text" name="comment"
+                                id="comment" placeholder="Enter a Reply here">
+
+                            <input type="hidden" name="parentSno" value="{{comment.sno}}">
+
+                            <button class="btn btn-primary" type="submit">Comment</button>
+                        </form>
+
+                    </div>
+                    {% endif %}
+
+                    <div class="replies my-2">
+
+                        {% for reply in replies %}
+                        {% if reply.parent == comment %}
+
+
+                        <div class="row g-0 overflow-hidden flex-md-row p-1 mt-2 pt-2 shadow-sm h-md-250 position-relative">
+
+                            <!-- <div class="row"> -->
+                                <div class="col-md-1 mb-2">
+                                    <img src="/static/img/reply.png" width="40px" alt="">
+                                </div>
+                                <div class="col-md-11">
+                                    <strong>{{reply.user.username}}</strong>
+                                    <small>{{reply.timestamp|naturaltime}}</small>
+                                    <div>{{reply.comment}}</div>
+                                </div>
+                            <!-- </div> -->
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+
+</div>
+
+
 
 {% endblock body %}

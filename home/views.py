@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
-# Create your views here.
+# HTML Pages
 def home(request):
     return render(request, 'home/home.html')
 
@@ -52,7 +52,7 @@ def search(request):
 
     return render(request, 'home/search.html', {'posts': posts, 'query':query})
 
-
+# Authentication APIs 
 def handleSignup(request):
     if request.method == 'POST':
         # Get the post parameters 
@@ -103,12 +103,9 @@ def handleLogin(request):
             return redirect('home')
 
     return HttpResponse('404 Not Found')
-
-
     
 def handleLogout(request):
     logout(request)
     messages.success(request, "Successfully Logged Out")
     return redirect('home')
-    # return HttpResponse("Handle Logout")
 

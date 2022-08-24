@@ -9,6 +9,8 @@
     integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
 </head>
 
+{% block css %}{% endblock css %}
+
 <body>
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -42,7 +44,7 @@
         <form method="GET" action="/search" class="d-flex mx-3" role="search">
           <input class="form-control me-2" type="search" name="query" id="search" placeholder="Search"
             aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+          <button class="btn btn-primary" type="submit">Search</button>
         </form>
         
 
