@@ -12,6 +12,11 @@
     .col-md-1 {
         margin-left: -30px;
     }
+
+.postContent{
+    text-align: justify;
+}
+
 </style>
 {% endblock css %}
 
@@ -21,7 +26,7 @@
     <div class="blog-post">
         <h2 class="blog-post-title mb-1">{{ post.title }}</h2>
         <p class="blog-post-meta">{{ post.timeStamp}} by <a href="#">{{ post.author }}</a></p>
-        <p>{{ post.content|safe }}</p>
+        <div class="postContent">{{ post.content|safe }}</div>
     </div>
 </div>
 
@@ -117,7 +122,6 @@
     {% endfor %}
 
 </div>
-
 
 
 {% endblock body %}
