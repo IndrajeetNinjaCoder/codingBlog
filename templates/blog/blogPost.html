@@ -15,6 +15,7 @@
 
 .postContent{
     text-align: justify;
+    font-size: 21px;
 }
 
 </style>
@@ -23,9 +24,9 @@
 {% block body %}
 {% load humanize %}
 <div class="container">
-    <div class="blog-post">
+    <div class="blog-post my-4">
         <h2 class="blog-post-title mb-1">{{ post.title }}</h2>
-        <p class="blog-post-meta">{{ post.timeStamp}} by <a href="#">{{ post.author }}</a></p>
+        <p class="blog-post-meta">{{ post.timeStamp}} by <a href="#">{{ post.author }}</a> &nbsp;<span>{{post.views}} Views</span></p>
         <div class="postContent">{{ post.content|safe }}</div>
     </div>
 </div>
@@ -37,7 +38,6 @@
     <div class="my-2">
 
         {% if user.is_authenticated %}
-        {% comment %} <h1>{{user.username}}</h1> {% endcomment %}
 
         <form class="d-flex" action="/blog/postcomment" method="post"> {% csrf_token %}
             <input type="hidden" name="postSno" value="{{ post.sno }}" id="postSno">

@@ -8,10 +8,16 @@ from django.contrib.auth import authenticate, login, logout
 
 # HTML Pages
 def home(request):
-    return render(request, 'home/home.html')
+    posts = Post.objects.all().order_by('-views')
+    popularPosts = []
+    for i in range(3):
+        popularPosts.append(posts[i])
+
+    return render(request, 'home/home.html', {'popularPosts': popularPosts})
 
 def about(request):
-    return render(request, 'home/about.html')
+    return HttpResponse("<h2>404 Not Found</h2>")
+    # return render(request, 'home/about.html')
 
 def contact(request):
     if request.method == 'POST':
@@ -40,6 +46,7 @@ def contact(request):
 def search(request):
     query = request.GET['query']
 
+
     if len(query) > 78:
         posts = Post.objects.none()
     else:
@@ -47,7 +54,7 @@ def search(request):
         posts = Post.objects.filter(title__icontains=query)
         posts = Post.objects.filter(content__icontains=query)
 
-    if posts.count() == 0:
+    if posts.count() == 0 or query == "":
         messages.warning(request, "No Search results found. Please refine your query.")
 
     return render(request, 'home/search.html', {'posts': posts, 'query':query})

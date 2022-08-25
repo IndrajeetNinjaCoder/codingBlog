@@ -7,6 +7,7 @@
     <style>
         .card-text{
             text-align: justify;
+            font-size: 21px;
         }
     </style>
 {% endblock css %}
@@ -26,14 +27,15 @@
 <div class="container">
     <h2 class="my-4">Coding Articles by codingBlog</h2>
 
+
     {% for post in posts %}
 
     <div class="row g-0 border rounded overflow-hidden flex-md-row my-4 shadow-sm h-md-250 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
             <strong class="d-inline-block mb-2 text-primary">Article by {{ post.author }}</strong>
             <h3 class="mb-0">{{ post.title }}</h3>
-            <div class="mb-1 text-muted">{{ post.timeStamp }}</div>
-            <div class="card-text mb-auto"><span class="preview">{{ post.content|safe|slice:"500" }}</span>...</div>
+            <div class="mb-1 text-muted">{{ post.timeStamp }} <span>({{post.views}} Views)</span></div>
+            <div class="card-text mb-auto"><span class="preview">{{ post.content|safe|slice:"250" }}</span>...</div>
 
             <div class="mt-2">
                 <a href="/blog/{{ post.slug }}" role="button" class="btn btn-primary stretched-link">Continue reading</a>
@@ -43,6 +45,19 @@
     </div>
 
     {% endfor %}
+
+    
+    {% if postcount > 5 %}
+    <div class="d-flex flex-row mb-3">
+        <a href="/blog/{{postcount|add:-5}}" class="btn btn-primary">Previous</a>
+    </div>
+    {% endif %}
+
+    {% if postcount < totalPosts %}
+    <div class="d-flex flex-row-reverse">
+        <a href="/blog/{{postcount|add:5}}" class="btn btn-primary">Next</a>
+    </div>
+    {% endif %}
 
 </div>
 

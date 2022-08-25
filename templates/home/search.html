@@ -2,12 +2,20 @@
 
 {% block title %}Search Results{% endblock title %}
 
+{% block css %}
+<style>
+    .container{
+        min-height: 81vh;
+    }
+</style>
+{% endblock css %}
+
 {% block body %}
 
 <div class="container">
     <h2 class="my-4">Search Results: </h2>
 
-    {% if posts|length < 1 %} 
+    {% if posts|length < 1%} 
     <p>No search results</p>
         Your search query : <b>{{query}}</b> did not match any documents. <br>
         Suggestions:

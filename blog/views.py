@@ -1,14 +1,29 @@
+from turtle import position
 from django.shortcuts import render, HttpResponse, redirect
 from .models import Post, BlogComment
 from django.contrib import messages
 
 
-def blogHome(request):
+def blogHome(request, postcount):
     posts = Post.objects.all()
-    return render(request, 'blog/blogHome.html', {'posts':posts})
+    myPosts = []
+    for i in range(postcount):
+        if i >= len(posts):
+            break
+        else:
+            myPosts.append(posts[i])
+
+    params = {'posts':myPosts, 'postcount': postcount, 'totalPosts': len(posts)}
+    return render(request, 'blog/blogHome.html', params)
 
 def blogPost(request, slug):
     post = Post.objects.filter(slug=slug).first()
+
+    post.views = post.views + 1
+    post.save()
+
+    print(type(post))
+
     comments = BlogComment.objects.filter(post=post, parent=None)
     reqlies = BlogComment.objects.filter(post=post).exclude(parent=None)
     params = {'post': post, 'comments':comments, 'replies':reqlies}
